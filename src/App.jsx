@@ -12,8 +12,8 @@ function App() {
   const [images, setImages] = useState([]);
   const [data, setData] = useState([]);
 
-  function recieveFiles(event) {
-    console.log("recieving files");
+  function receiveFiles(event) {
+    console.log("receiving files");
     const fileData = {};
     const files = event.target.files;
     function readFile(file, addUnit, length) {
@@ -46,7 +46,7 @@ function App() {
     }
   }
 
-  function recieveData(event) {
+  function receiveData(event) {
     let text = event.target.value;
     const entries = {};
     text
@@ -142,14 +142,15 @@ function App() {
           />
         </label>
         <label htmlFor="" className="uploadBtn">
-          Upload Images: <input type="file" onChange={recieveFiles} multiple />
+          Upload Images: <input type="file" onChange={receiveFiles} multiple />
         </label>
         <label htmlFor="" className="centerAllBtn">
           <button>Center all images</button>
         </label>
         <label htmlFor="" className="dataInput">
-          Name | ID | Order{" "}
-          <textarea name="" id="" onChange={recieveData}></textarea>
+          Name | ID | Order (Each column separated by TAB and each row by ENTER,
+          or just copy paste such a table from Excel)
+          <textarea name="" id="" onChange={receiveData}></textarea>
         </label>
       </div>
       <div id="output-container" style={{ backgroundColor: bgColor }}>

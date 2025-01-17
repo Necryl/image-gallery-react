@@ -21,11 +21,9 @@ body {
 }
 
 #settings > * {
-  min-width: max-content;
   display: grid;
   gap: 0.3rem;
 }
-
 #settings .dataInput {
   grid-column: span 2;
 }
