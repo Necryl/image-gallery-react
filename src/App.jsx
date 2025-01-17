@@ -148,8 +148,8 @@ function App() {
           <button>Center all images</button>
         </label>
         <label htmlFor="" className="dataInput">
-          Name | ID | Order (Each column separated by TAB and each row by ENTER,
-          or just copy paste such a table from Excel)
+          Filename | Name | Order (Each column separated by TAB and each row by
+          ENTER, or just copy paste such a table from Excel)
           <textarea name="" id="" onChange={receiveData}></textarea>
         </label>
       </div>
