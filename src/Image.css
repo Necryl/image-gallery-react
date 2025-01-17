@@ -1,0 +1,10 @@
+.image-container {
+  display: grid;
+  color: black;
+  justify-items: center;
+  border-radius: 0.4rem;
+  border-style: solid;
+}
+.image-container img {
+  object-fit: cover;
+}

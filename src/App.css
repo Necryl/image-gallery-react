@@ -1,0 +1,54 @@
+#root {
+  margin: 0 auto;
+}
+
+html,
+body {
+  margin: 0%;
+  padding: 0%;
+}
+
+#app {
+  display: grid;
+  padding: 1rem;
+  gap: 3em;
+}
+
+#settings {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+#settings > * {
+  min-width: max-content;
+  display: grid;
+  gap: 0.3rem;
+}
+
+#settings .dataInput {
+  grid-column: span 2;
+}
+
+#settings .dataInput textarea {
+  height: 10ch;
+}
+
+#output-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  padding: 1rem;
+  min-height: 100px;
+  border-radius: 0.5rem;
+}
+
+@media print {
+  #settings {
+    display: none;
+  }
+  #app {
+    padding: 0%;
+  }
+}
