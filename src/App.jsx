@@ -5,10 +5,10 @@ import Image from "./Image.jsx";
 function App() {
   const [height, setHeight] = useState(250);
   const [width, setWidth] = useState(250);
-  const [imageBgColor, setImageBgColor] = useState("blue");
-  const [bgColor, setBgColor] = useState("white");
+  const [imageBgColor, setImageBgColor] = useState("#1979E7");
+  const [bgColor, setBgColor] = useState("#F2F8FF");
   const [borderWidth, setBorderWidth] = useState(2);
-  const [borderColor, setBorderColor] = useState("black");
+  const [borderColor, setBorderColor] = useState("#000000");
   const [images, setImages] = useState([]);
   const [data, setData] = useState([]);
 
