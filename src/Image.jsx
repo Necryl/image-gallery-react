@@ -23,15 +23,15 @@ function Image({ dataProp }) {
   const oldZoomRef = useRef({
     global: globalZoom,
     zoom: zoom,
-    latesIsGlobal: true,
+    latestIsGlobal: true,
   });
   const oldZoom = oldZoomRef.current;
   if (oldZoom.global !== globalZoom) {
     oldZoom.global = globalZoom;
-    oldZoom.latesIsGlobal = true;
+    oldZoom.latestIsGlobal = true;
   } else if (oldZoom.zoom !== zoom) {
     oldZoom.zoom = zoom;
-    oldZoom.latesIsGlobal = false;
+    oldZoom.latestIsGlobal = false;
   }
   const containerRef = useRef();
 
@@ -69,7 +69,7 @@ function Image({ dataProp }) {
         <img
           src={imageData}
           style={{
-            transform: `scale(${oldZoom.latesIsGlobal ? globalZoom : zoom})`,
+            transform: `scale(${oldZoom.latestIsGlobal ? globalZoom : zoom})`,
             height: height + "px",
           }}
           alt={"image of " + name}
