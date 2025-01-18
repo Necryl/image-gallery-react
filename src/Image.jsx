@@ -39,9 +39,12 @@ function Image({ dataProp }) {
     const handleWheel = (e) => {
       e.preventDefault();
       const scaleFactor = 0.1;
-      let newZoom = zoom + (e.deltaY < 0 ? scaleFactor : -scaleFactor);
+      let newZoom =
+        (oldZoom.latestIsGlobal ? globalZoom : zoom) +
+        (e.deltaY < 0 ? scaleFactor : -scaleFactor);
       newZoom = Math.max(0.1, Math.min(newZoom, 10)); // Min and max zoom limits
       setZoom(newZoom);
+      oldZoom.latestIsGlobal = false;
     };
     const container = containerRef.current;
     container.addEventListener("wheel", handleWheel, { passive: false });
@@ -50,7 +53,7 @@ function Image({ dataProp }) {
     return () => {
       container.removeEventListener("wheel", handleWheel);
     };
-  }, [zoom]);
+  }, [zoom, globalZoom, oldZoom]);
 
   return (
     <div className="image-container" style={{ fontSize: textSize + "rem" }}>
