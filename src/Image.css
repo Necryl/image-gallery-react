@@ -1,10 +1,26 @@
 .image-container {
   display: grid;
-  color: black;
   justify-items: center;
+  gap: 0.5em;
+}
+.image-wrapper {
+  display: grid;
+  place-content: center;
+  color: black;
   border-radius: 0.4rem;
   border-style: solid;
+  overflow: hidden;
+  position: relative;
 }
+
 .image-container img {
-  object-fit: cover;
+  height: 100%;
+  object-fit: contain;
+}
+
+.image-container h3 {
+  color: black;
+  font-size: 1em;
+  margin: 0%;
+  padding: 0%;
 }

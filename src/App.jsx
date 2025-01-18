@@ -5,7 +5,10 @@ import Image from "./Image.jsx";
 function App() {
   const [height, setHeight] = useState(250);
   const [width, setWidth] = useState(250);
+  const [globalZoom, setGlobalZoom] = useState(1);
   const [imageBgColor, setImageBgColor] = useState("#1979E7");
+  const [textColor, setTextColor] = useState("#000000");
+  const [textSize, setTextSize] = useState(1);
   const [bgColor, setBgColor] = useState("#F2F8FF");
   const [borderWidth, setBorderWidth] = useState(2);
   const [borderColor, setBorderColor] = useState("#000000");
@@ -125,7 +128,7 @@ function App() {
             id=""
             value={borderWidth}
             onChange={(e) => {
-              setBorderWidth(e.target.value);
+              setBorderWidth(Number(e.target.value));
             }}
           />
         </label>
@@ -141,11 +144,60 @@ function App() {
             }}
           />
         </label>
-        <label htmlFor="" className="uploadBtn">
-          Upload Images: <input type="file" onChange={receiveFiles} multiple />
+        <label htmlFor="" className="textSize">
+          Text Size:
+          <input
+            type="number"
+            name=""
+            id=""
+            value={textSize}
+            onChange={(e) => {
+              setTextSize(Number(e.target.value));
+            }}
+          />
+        </label>
+        <label htmlFor="" className="textColor">
+          Text Color:
+          <input
+            type="color"
+            name=""
+            id=""
+            value={textColor}
+            onChange={(e) => {
+              setTextColor(e.target.value);
+            }}
+          />
+        </label>
+        <label htmlFor="" className="zoom">
+          Set Scale on All Images (%):
+          <input
+            type="number"
+            min={10}
+            max={1000}
+            name=""
+            id=""
+            value={globalZoom * 100}
+            onChange={(e) => {
+              setGlobalZoom(
+                (() => {
+                  const num = Number(e.target.value) / 100;
+                  if (num >= 0.01 && num <= 10) {
+                    return num;
+                  } else if (num < 0.01) {
+                    return 0.01;
+                  } else {
+                    return 10;
+                  }
+                })()
+              );
+            }}
+          />
         </label>
         <label htmlFor="" className="centerAllBtn">
           <button>Center all images</button>
+        </label>
+        <label htmlFor="" className="uploadBtn">
+          Upload Images: <input type="file" onChange={receiveFiles} multiple />
         </label>
         <label htmlFor="" className="dataInput">
           Filename | Name | Order (Each column separated by TAB and each row by
@@ -167,6 +219,9 @@ function App() {
                   imageBgColor,
                   borderWidth,
                   borderColor,
+                  textSize,
+                  textColor,
+                  globalZoom,
                   imageData: image.src,
                   name: data[image.id].name,
                 }}
