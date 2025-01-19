@@ -58,11 +58,13 @@ function App() {
       .split("\n")
       .map((line) => line.split("\t"))
       .map((entry) => {
-        return {
-          id: entry[0],
-          name: entry[1],
-          order: Number(entry[2]),
-        };
+        return entry[0]
+          ? {
+              id: entry[0],
+              name: entry[1] || entry[0],
+              order: Number(entry[2]) || 1,
+            }
+          : false;
       })
       .forEach((entry) => {
         entries[entry.id] = entry;
@@ -82,6 +84,18 @@ function App() {
             value={bgColor}
             onChange={(e) => {
               setBgColor(e.target.value);
+            }}
+          />
+        </label>
+        <label htmlFor="" className="imageBgColor">
+          Image Background color:{" "}
+          <input
+            type="color"
+            name=""
+            id=""
+            value={imageBgColor}
+            onChange={(e) => {
+              setImageBgColor(e.target.value);
             }}
           />
         </label>
@@ -106,18 +120,6 @@ function App() {
             value={width}
             onChange={(e) => {
               setWidth(e.target.value);
-            }}
-          />
-        </label>
-        <label htmlFor="" className="imageBgColor">
-          Image Background color:{" "}
-          <input
-            type="color"
-            name=""
-            id=""
-            value={imageBgColor}
-            onChange={(e) => {
-              setImageBgColor(e.target.value);
             }}
           />
         </label>
@@ -215,8 +217,8 @@ function App() {
       </div>
       <div id="output-container" style={{ backgroundColor: bgColor }}>
         {(() => {
-          const imagesSorted = Object.values(images).sort(
-            (a, b) => data[a.id].order - data[b.id].order
+          const imagesSorted = Object.values(images).sort((a, b) =>
+            data[a.id] && data[b.id] ? data[a.id].order - data[b.id].order : 0
           );
           return imagesSorted.map((image, index) => {
             return (
@@ -232,7 +234,7 @@ function App() {
                   globalZoom,
                   globalPosOffset,
                   imageData: image.src,
-                  name: data[image.id].name,
+                  name: data[image.id] ? data[image.id].name : image.id,
                 }}
                 key={index}
               />
