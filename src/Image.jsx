@@ -14,11 +14,32 @@ function Image({ dataProp }) {
     textSize,
     textColor,
     globalZoom,
+    globalPosition,
     imageData,
     name,
   } = dataProp;
 
   const [isDragging, setIsDragging] = useState(false);
+  const [position, setPosition] = useState(globalPosition);
+  const oldPositionRef = useRef({
+    global: globalPosition,
+    position: position,
+    latestIsGlobal: true,
+  });
+  const oldPosition = oldPositionRef.current;
+  if (oldPosition.global !== globalPosition) {
+    oldPosition.global = globalPosition;
+    oldPosition.latestIsGlobal = true;
+  } else if (oldPosition.position !== position) {
+    oldPosition.position = position;
+    oldPosition.latestIsGlobal = false;
+  }
+
+  const dragPosRef = useRef({
+    startDrag: { x: 0, y: 0 },
+  });
+  const dragPos = dragPosRef.current;
+
   const [zoom, setZoom] = useState(globalZoom);
   const oldZoomRef = useRef({
     global: globalZoom,
@@ -34,8 +55,32 @@ function Image({ dataProp }) {
     oldZoom.latestIsGlobal = false;
   }
   const containerRef = useRef();
+  const imageRef = useRef();
 
   useEffect(() => {
+    const container = containerRef.current;
+    const imageElem = imageRef.current;
+    const handleMouseUp = (e) => {
+      setIsDragging(false);
+      const rect = e.target.getBoundingClientRect();
+      setPosition({ x: rect.left, y: rect.top });
+    };
+    const handleMouseDown = (e) => {
+      dragPos.startDrag = { x: e.clientX, y: e.clientY };
+      setIsDragging(true);
+    };
+
+    const handleMouseMove = (e) => {
+      if (!isDragging) return;
+
+      const deltaX = e.clientX - dragPos.startDrag.x;
+      const deltaY = e.clientY - dragPos.startDrag.y;
+
+      setPosition({
+        x: position.x + deltaX,
+        y: position.y + deltaY,
+      });
+    };
     const handleWheel = (e) => {
       e.preventDefault();
       const scaleFactor = 0.1;
@@ -46,14 +91,37 @@ function Image({ dataProp }) {
       setZoom(newZoom);
       oldZoom.latestIsGlobal = false;
     };
-    const container = containerRef.current;
-    container.addEventListener("wheel", handleWheel, { passive: false });
+    if (container) {
+      container.addEventListener("wheel", handleWheel, { passive: false });
+    }
+    if (imageElem) {
+      imageElem.addEventListener("mousedown", handleMouseDown);
+      imageElem.addEventListener("mousemove", handleMouseMove);
+      imageElem.addEventListener("mouseup", handleMouseUp);
+      imageElem.addEventListener("mouseleave", handleMouseUp);
+    }
 
     // Cleanup listener on unmount
     return () => {
-      container.removeEventListener("wheel", handleWheel);
+      if (imageElem) {
+        imageElem.removeEventListener("mousedown", handleMouseDown);
+        imageElem.removeEventListener("mousemove", handleMouseMove);
+        imageElem.removeEventListener("mouseup", handleMouseUp);
+        imageElem.removeEventListener("mouseleave", handleMouseUp);
+      }
+      if (container) {
+        container.removeEventListener("wheel", handleWheel);
+      }
     };
-  }, [zoom, globalZoom, oldZoom]);
+  }, [dragPos, globalZoom, isDragging, oldZoom, position.x, position.y, zoom]);
+
+  console.log(
+    ` Image (${name}): setting translate(${
+      oldPosition.latestIsGlobal
+        ? `${oldPosition.global.x}px, ${oldPosition.global.y}px`
+        : `${position.x}px, ${position.y}px`
+    })`
+  );
 
   return (
     <div className="image-container" style={{ fontSize: textSize + "rem" }}>
@@ -71,20 +139,18 @@ function Image({ dataProp }) {
       >
         <img
           src={imageData}
+          ref={imageRef}
           style={{
-            transform: `scale(${oldZoom.latestIsGlobal ? globalZoom : zoom})`,
+            transform: `scale(${
+              oldZoom.latestIsGlobal ? globalZoom : zoom
+            }) translate(${
+              oldPosition.latestIsGlobal
+                ? `${oldPosition.global.x}%, ${oldPosition.global.y}%`
+                : `${position.x}%, ${position.y}%`
+            })`,
             height: height + "px",
           }}
           alt={"image of " + name}
-          onMouseDown={() => {
-            setIsDragging(true);
-          }}
-          onMouseUp={() => {
-            setIsDragging(false);
-          }}
-          onMouseLeave={() => {
-            setIsDragging(false);
-          }}
         />
       </div>
       <h3 style={{ color: textColor }}>{name}</h3>
@@ -102,6 +168,10 @@ Image.propTypes = {
     textSize: PropTypes.number.isRequired,
     textColor: PropTypes.string.isRequired,
     globalZoom: PropTypes.number.isRequired,
+    globalPosition: PropTypes.shape({
+      x: PropTypes.number.isRequired,
+      y: PropTypes.number.isRequired,
+    }),
     imageData: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   }).isRequired,
