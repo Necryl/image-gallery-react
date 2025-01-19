@@ -204,7 +204,7 @@ function App() {
           </button>
         </label>
         <label htmlFor="" className="uploadBtn">
-          Upload Images: <input type="file" onChange={receiveFiles} multiple />
+          Load Images: <input type="file" onChange={receiveFiles} multiple />
         </label>
         <label htmlFor="" className="dataInput">
           Filename | Name | Order (Each column separated by TAB and each row by
