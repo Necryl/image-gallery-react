@@ -12,6 +12,7 @@
   border-style: solid;
   overflow: hidden;
   position: relative;
+  user-select: none;
 }
 
 .image-container img {
@@ -20,6 +21,7 @@
   top: 0;
   left: 0;
   object-fit: contain;
+  user-select: none;
 }
 
 .image-container h3 {

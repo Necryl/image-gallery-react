@@ -3,11 +3,11 @@ import "./App.css";
 import Image from "./Image.jsx";
 
 function App() {
-  const centerPosition = { x: 0, y: 0 };
+  const initialPosOffset = { x: 0, y: 0 };
   const [height, setHeight] = useState(250);
   const [width, setWidth] = useState(250);
   const [globalZoom, setGlobalZoom] = useState(1);
-  const [globalPosition, setGlobalPosition] = useState(centerPosition);
+  const [globalPosOffset, setGlobalPosOffset] = useState([initialPosOffset, 0]);
   const [imageBgColor, setImageBgColor] = useState("#1979E7");
   const [textColor, setTextColor] = useState("#000000");
   const [textSize, setTextSize] = useState(1);
@@ -198,7 +198,7 @@ function App() {
         <label htmlFor="" className="centerAllBtn">
           <button
             onClick={() => {
-              setGlobalPosition(centerPosition);
+              setGlobalPosOffset((prev) => [prev[0], prev[1] + 1]);
             }}
           >
             Center all images
@@ -230,7 +230,7 @@ function App() {
                   textSize,
                   textColor,
                   globalZoom,
-                  globalPosition,
+                  globalPosOffset,
                   imageData: image.src,
                   name: data[image.id].name,
                 }}

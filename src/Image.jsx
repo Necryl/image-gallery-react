@@ -14,31 +14,37 @@ function Image({ dataProp }) {
     textSize,
     textColor,
     globalZoom,
-    globalPosition,
+    globalPosOffset,
     imageData,
     name,
   } = dataProp;
 
   const [isDragging, setIsDragging] = useState(false);
-  const [position, setPosition] = useState(globalPosition);
-  const oldPositionRef = useRef({
-    global: globalPosition,
-    position: position,
+  const [posOffset, setPosOffset] = useState({ x: 0, y: 0 });
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  const dragRef = useRef({
+    start: { ...position },
+    offset: null,
+  });
+
+  const drag = dragRef.current;
+
+  const oldPosOffsetRef = useRef({
+    global: globalPosOffset[0],
+    globalCounter: globalPosOffset[1],
+    pos: posOffset,
     latestIsGlobal: true,
   });
-  const oldPosition = oldPositionRef.current;
-  if (oldPosition.global !== globalPosition) {
-    oldPosition.global = globalPosition;
-    oldPosition.latestIsGlobal = true;
-  } else if (oldPosition.position !== position) {
-    oldPosition.position = position;
-    oldPosition.latestIsGlobal = false;
+  const oldPosOffset = oldPosOffsetRef.current;
+  if (oldPosOffset.globalCounter !== globalPosOffset[1]) {
+    oldPosOffset.global = globalPosOffset[0];
+    oldPosOffset.globalCounter = globalPosOffset[1];
+    oldPosOffset.latestIsGlobal = true;
+  } else if (oldPosOffset.pos !== posOffset) {
+    oldPosOffset.pos = posOffset;
+    oldPosOffset.latestIsGlobal = false;
   }
-
-  const dragPosRef = useRef({
-    startDrag: { x: 0, y: 0 },
-  });
-  const dragPos = dragPosRef.current;
 
   const [zoom, setZoom] = useState(globalZoom);
   const oldZoomRef = useRef({
@@ -57,30 +63,10 @@ function Image({ dataProp }) {
   const containerRef = useRef();
   const imageRef = useRef();
 
+  //zooming
   useEffect(() => {
     const container = containerRef.current;
-    const imageElem = imageRef.current;
-    const handleMouseUp = (e) => {
-      setIsDragging(false);
-      const rect = e.target.getBoundingClientRect();
-      setPosition({ x: rect.left, y: rect.top });
-    };
-    const handleMouseDown = (e) => {
-      dragPos.startDrag = { x: e.clientX, y: e.clientY };
-      setIsDragging(true);
-    };
 
-    const handleMouseMove = (e) => {
-      if (!isDragging) return;
-
-      const deltaX = e.clientX - dragPos.startDrag.x;
-      const deltaY = e.clientY - dragPos.startDrag.y;
-
-      setPosition({
-        x: position.x + deltaX,
-        y: position.y + deltaY,
-      });
-    };
     const handleWheel = (e) => {
       e.preventDefault();
       const scaleFactor = 0.1;
@@ -94,34 +80,75 @@ function Image({ dataProp }) {
     if (container) {
       container.addEventListener("wheel", handleWheel, { passive: false });
     }
-    if (imageElem) {
-      imageElem.addEventListener("mousedown", handleMouseDown);
-      imageElem.addEventListener("mousemove", handleMouseMove);
-      imageElem.addEventListener("mouseup", handleMouseUp);
-      imageElem.addEventListener("mouseleave", handleMouseUp);
-    }
 
     // Cleanup listener on unmount
     return () => {
-      if (imageElem) {
-        imageElem.removeEventListener("mousedown", handleMouseDown);
-        imageElem.removeEventListener("mousemove", handleMouseMove);
-        imageElem.removeEventListener("mouseup", handleMouseUp);
-        imageElem.removeEventListener("mouseleave", handleMouseUp);
-      }
       if (container) {
         container.removeEventListener("wheel", handleWheel);
       }
     };
-  }, [dragPos, globalZoom, isDragging, oldZoom, position.x, position.y, zoom]);
+  }, [globalZoom, oldZoom, zoom]);
 
-  console.log(
-    ` Image (${name}): setting translate(${
-      oldPosition.latestIsGlobal
-        ? `${oldPosition.global.x}px, ${oldPosition.global.y}px`
-        : `${position.x}px, ${position.y}px`
-    })`
-  );
+  //dragging
+  useEffect(() => {
+    const imageElem = imageRef.current;
+
+    const handleMouseUp = () => {
+      setIsDragging(false);
+      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("mousemove", handleMouseMove);
+    };
+    const handleMouseDown = (e) => {
+      setIsDragging(true);
+      drag.start = { x: e.clientX, y: e.clientY };
+      document.addEventListener("mouseup", handleMouseUp);
+      document.addEventListener("mousemove", handleMouseMove);
+    };
+
+    const handleMouseMove = (e) => {
+      if (!isDragging) return;
+
+      const deltaX = e.clientX - drag.start.x; // Calculate the mouse movement
+      const deltaY = e.clientY - drag.start.y;
+
+      setPosOffset((prev) => ({ x: prev.x + deltaX, y: prev.y + deltaY })); // Update visual position
+      drag.start = { x: e.clientX, y: e.clientY }; // Update the last mouse position
+    };
+    if (imageElem) {
+      imageElem.addEventListener("mousedown", handleMouseDown);
+    }
+    return () => {
+      if (imageElem) {
+        imageElem.removeEventListener("mousedown", handleMouseDown);
+      }
+    };
+  }, [drag, isDragging]);
+
+  //positioning
+  useEffect(() => {
+    const imageElem = imageRef.current;
+
+    if (imageElem) {
+      const center = {
+        x: -(imageElem.offsetWidth / 2 - width / 2),
+        y: -(imageElem.offsetHeight / 2 - height / 2),
+      };
+      const newX =
+        (oldPosOffset.latestIsGlobal ? globalPosOffset[0].x : posOffset.x) +
+        center.x;
+      const newY =
+        (oldPosOffset.latestIsGlobal ? globalPosOffset[0].y : posOffset.y) +
+        center.y;
+      setPosition({ x: newX, y: newY });
+    }
+  }, [
+    globalPosOffset,
+    height,
+    oldPosOffset.latestIsGlobal,
+    posOffset.x,
+    posOffset.y,
+    width,
+  ]);
 
   return (
     <div className="image-container" style={{ fontSize: textSize + "rem" }}>
@@ -141,12 +168,9 @@ function Image({ dataProp }) {
           src={imageData}
           ref={imageRef}
           style={{
-            transform: `scale(${
+            transformOrigin: "center center",
+            transform: `translate(${position.x}px, ${position.y}px) scale(${
               oldZoom.latestIsGlobal ? globalZoom : zoom
-            }) translate(${
-              oldPosition.latestIsGlobal
-                ? `${oldPosition.global.x}%, ${oldPosition.global.y}%`
-                : `${position.x}%, ${position.y}%`
             })`,
             height: height + "px",
           }}
@@ -168,10 +192,15 @@ Image.propTypes = {
     textSize: PropTypes.number.isRequired,
     textColor: PropTypes.string.isRequired,
     globalZoom: PropTypes.number.isRequired,
-    globalPosition: PropTypes.shape({
-      x: PropTypes.number.isRequired,
-      y: PropTypes.number.isRequired,
-    }),
+    globalPosOffset: PropTypes.arrayOf(
+      PropTypes.oneOfType([
+        PropTypes.shape({
+          x: PropTypes.number.isRequired,
+          y: PropTypes.number.isRequired,
+        }),
+        PropTypes.number,
+      ])
+    ),
     imageData: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   }).isRequired,
