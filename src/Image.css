@@ -3,6 +3,7 @@
   display: grid;
   justify-items: center;
   gap: 0.5em;
+  page-break-inside: avoid;
 }
 .image-wrapper {
   display: grid;
@@ -29,4 +30,5 @@
   font-size: 1em;
   margin: 0%;
   padding: 0%;
+  text-align: center;
 }

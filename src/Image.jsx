@@ -177,7 +177,7 @@ function Image({ dataProp }) {
           alt={"image of " + name}
         />
       </div>
-      <h3 style={{ color: textColor }}>{name}</h3>
+      <h3 style={{ color: textColor, width: width + "px" }}>{name}</h3>
     </div>
   );
 }

@@ -4,13 +4,13 @@ import Image from "./Image.jsx";
 
 function App() {
   const initialPosOffset = { x: 0, y: 0 };
-  const [height, setHeight] = useState(250);
-  const [width, setWidth] = useState(250);
+  const [height, setHeight] = useState(150);
+  const [width, setWidth] = useState(150);
   const [globalZoom, setGlobalZoom] = useState(1);
   const [globalPosOffset, setGlobalPosOffset] = useState([initialPosOffset, 0]);
   const [imageBgColor, setImageBgColor] = useState("#1979E7");
   const [textColor, setTextColor] = useState("#000000");
-  const [textSize, setTextSize] = useState(1);
+  const [textSize, setTextSize] = useState(0.75);
   const [bgColor, setBgColor] = useState("#F2F8FF");
   const [borderWidth, setBorderWidth] = useState(2);
   const [borderColor, setBorderColor] = useState("#000000");
