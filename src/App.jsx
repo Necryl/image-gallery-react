@@ -18,12 +18,10 @@ function App() {
   const [data, setData] = useState([]);
 
   function receiveFiles(event) {
-    console.log("receiving files");
     const fileData = {};
     const files = event.target.files;
     function readFile(file, addUnit, length) {
       let reader = new FileReader();
-      console.log("reading a file");
       reader.addEventListener(
         "load",
         () => {
@@ -39,7 +37,6 @@ function App() {
       readFile(files[i], addUnit, files.length);
     }
     function addUnit(id, imageData, path, length) {
-      console.log("file read:", arguments);
       fileData[id] = {
         src: imageData,
         path: path,
