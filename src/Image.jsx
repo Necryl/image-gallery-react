@@ -17,6 +17,7 @@ function Image({ dataProp }) {
     globalPosOffset,
     imageData,
     name,
+    subText,
   } = dataProp;
 
   const [isDragging, setIsDragging] = useState(false);
@@ -178,6 +179,7 @@ function Image({ dataProp }) {
         />
       </div>
       <h3 style={{ color: textColor, width: width + "px" }}>{name}</h3>
+      <h4 className="subText">Rs. {subText}/-</h4>
     </div>
   );
 }
@@ -199,10 +201,11 @@ Image.propTypes = {
           y: PropTypes.number.isRequired,
         }),
         PropTypes.number,
-      ])
+      ]),
     ),
     imageData: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
+    subText: PropTypes.string.isRequired,
   }).isRequired,
 };
 

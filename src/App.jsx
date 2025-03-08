@@ -29,7 +29,7 @@ function App() {
           let name = file.name.split(".")[0];
           addUnit(name, reader.result, file.name, length);
         },
-        false
+        false,
       );
       reader.readAsDataURL(file);
     }
@@ -60,6 +60,7 @@ function App() {
               id: entry[0],
               name: entry[1] || entry[0],
               order: Number(entry[2]) || 1,
+              subText: entry[3] || "",
             }
           : false;
       })
@@ -189,7 +190,7 @@ function App() {
                   } else {
                     return 10;
                   }
-                })()
+                })(),
               );
             }}
           />
@@ -215,7 +216,7 @@ function App() {
       <div id="output-container" style={{ backgroundColor: bgColor }}>
         {(() => {
           const imagesSorted = Object.values(images).sort((a, b) =>
-            data[a.id] && data[b.id] ? data[a.id].order - data[b.id].order : 0
+            data[a.id] && data[b.id] ? data[a.id].order - data[b.id].order : 0,
           );
           return imagesSorted.map((image, index) => {
             return (
@@ -232,6 +233,7 @@ function App() {
                   globalPosOffset,
                   imageData: image.src,
                   name: data[image.id] ? data[image.id].name : image.id,
+                  subText: data[image.id] ? data[image.id].subText : "",
                 }}
                 key={index}
               />

@@ -1,34 +1,42 @@
 .image-container {
-  position: relative;
-  display: grid;
-  justify-items: center;
-  gap: 0.5em;
-  page-break-inside: avoid;
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: 0.5em;
+    page-break-inside: avoid;
 }
 .image-wrapper {
-  display: grid;
-  place-content: center;
-  color: black;
-  border-radius: 0.4rem;
-  border-style: solid;
-  overflow: hidden;
-  position: relative;
-  user-select: none;
+    display: grid;
+    place-content: center;
+    color: black;
+    border-radius: 0.4rem;
+    border-style: solid;
+    overflow: hidden;
+    position: relative;
+    user-select: none;
 }
 
 .image-container img {
-  position: absolute;
-  height: 100%;
-  top: 0;
-  left: 0;
-  object-fit: contain;
-  user-select: none;
+    position: absolute;
+    height: 100%;
+    top: 0;
+    left: 0;
+    object-fit: contain;
+    user-select: none;
 }
 
 .image-container h3 {
-  color: black;
-  font-size: 1em;
-  margin: 0%;
-  padding: 0%;
-  text-align: center;
+    color: black;
+    font-size: 1em;
+    margin: 0%;
+    padding: 0%;
+    text-align: center;
+}
+
+.subText {
+    color: black;
+    font-size: 1em;
+    margin: 0%;
+    padding: 0%;
+    text-align: center;
 }
