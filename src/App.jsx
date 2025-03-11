@@ -219,7 +219,7 @@ function App() {
             data[a.id] && data[b.id] ? data[a.id].order - data[b.id].order : 0,
           );
           return imagesSorted.map((image, index) => {
-            return (
+            return data[image.id] ? (
               <Image
                 dataProp={{
                   height,
@@ -237,6 +237,8 @@ function App() {
                 }}
                 key={index}
               />
+            ) : (
+              false
             );
           });
         })()}
