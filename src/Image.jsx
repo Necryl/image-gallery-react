@@ -17,6 +17,7 @@ function Image({ dataProp }) {
     globalPosOffset,
     imageData,
     name,
+    subtext,
   } = dataProp;
 
   const [isDragging, setIsDragging] = useState(false);
@@ -177,7 +178,10 @@ function Image({ dataProp }) {
           alt={"image of " + name}
         />
       </div>
-      <h3 style={{ color: textColor, width: width + "px" }}>{name}</h3>
+      <div className ="image-text">
+        <h3 style={{ color: textColor }}>{name}</h3>
+        <h4 style={{ color: textColor }}>{subtext}</h4>
+      </div>
     </div>
   );
 }
@@ -203,6 +207,7 @@ Image.propTypes = {
     ),
     imageData: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
+    subtext:PropTypes.string.isRequired,
   }).isRequired,
 };
 

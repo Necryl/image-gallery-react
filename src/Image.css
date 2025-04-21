@@ -24,11 +24,21 @@
   object-fit: contain;
   user-select: none;
 }
+.image-text {
+  display: grid;
+  gap: 0em;
+  justify-items: center;
+}
 
-.image-container h3 {
+.image-text * {
   color: black;
+  margin: 0em;
+  padding: 0em;
+}
+.image-text h3 {
   font-size: 1em;
-  margin: 0%;
-  padding: 0%;
-  text-align: center;
+}
+
+ .image-text h4 {
+   font-size: 0.9em
 }

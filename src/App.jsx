@@ -60,6 +60,7 @@ function App() {
               id: entry[0],
               name: entry[1] || entry[0],
               order: Number(entry[2]) || 1,
+              subtext: entry[3] || "",
             }
           : false;
       })
@@ -232,6 +233,7 @@ function App() {
                   globalPosOffset,
                   imageData: image.src,
                   name: data[image.id] ? data[image.id].name : image.id,
+                  subtext: data[image.id]?data[image.id].subtext:"",
                 }}
                 key={index}
               />
