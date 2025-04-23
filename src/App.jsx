@@ -208,7 +208,7 @@ function App() {
           Load Images: <input type="file" onChange={receiveFiles} multiple />
         </label>
         <label htmlFor="" className="dataInput">
-          Filename | Name | Order (Each column separated by TAB and each row by
+          Filename | Name | Order | Subtext (Each column separated by TAB and each row by
           ENTER, or just copy paste such a table from Excel)
           <textarea name="" id="" onChange={receiveData}></textarea>
         </label>
