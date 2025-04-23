@@ -16,6 +16,8 @@ function App() {
   const [borderColor, setBorderColor] = useState("#000000");
   const [images, setImages] = useState([]);
   const [data, setData] = useState([]);
+  const [title, setTitle] = useState([]);
+  const [subTitle, setSubTitle] = useState([]);
 
   function receiveFiles(event) {
     const fileData = {};
@@ -212,8 +214,19 @@ function App() {
           ENTER, or just copy paste such a table from Excel)
           <textarea name="" id="" onChange={receiveData}></textarea>
         </label>
+      <label className="title">
+        Title
+        <input type="text" onChange={(e)=>{setTitle(e.target.value)}}/>
+      </label>
+      <label className="title">
+        SubTitle
+        <input type="text"onChange={(e)=>{setSubTitle(e.target.value)}}/>
+      </label>
       </div>
       <div id="output-container" style={{ backgroundColor: bgColor }}>
+        <h1 id="title">{title}</h1>
+        <h2 id="subTitle">{subTitle}</h2>
+        <div id="gallery">
         {(() => {
           const imagesSorted = Object.values(images).sort((a, b) =>
             data[a.id] && data[b.id] ? data[a.id].order - data[b.id].order : 0
@@ -240,6 +253,7 @@ function App() {
             );
           });
         })()}
+        </div>
       </div>
     </div>
   );

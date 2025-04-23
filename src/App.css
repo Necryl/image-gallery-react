@@ -32,14 +32,45 @@ body {
   height: 10ch;
 }
 
-#output-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
+#settings .title {
+  grid-column: span 2;
+}
 
+#settings .title input {
+  font-size: 1rem;
+}
+
+#output-container {
   padding: 1rem;
   min-height: 3rem;
   border-radius: 0.5rem;
+  display: grid;
+  gap: 0.25rem;
+}
+
+#title, #subTitle {
+  color: black;
+  text-align: center;
+  margin: 0%;
+  padding: 0%;
+}
+
+#title {
+  font-size: 1.75rem;
+}
+
+#subTitle {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+#gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  place-content: center;
+
+  
 }
 
 @media print {
